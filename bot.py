@@ -13,6 +13,9 @@ from main.handlers import start_choice_branch
 from main.branch_book.handlers import choice_rest
 from main.branch_book.branch_lafa.handlers import choice_table_lafa
 
+from main.branch_admin.handlers import choice_res_adm
+from main.branch_admin.branch_amd_lafa.handlers import adm_lafa
+
 
 async def start_bot(bot: Bot):
     await set_commands(bot)
@@ -53,6 +56,12 @@ async def main():
 
     # Выбор стола в лафе
     dp.include_routers(choice_table_lafa.router)
+
+    # Ветка для владельцев ресторанов
+    dp.include_routers(choice_res_adm.router)
+
+    # Админ панель для lafa
+    dp.include_routers(adm_lafa.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
