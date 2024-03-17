@@ -10,30 +10,13 @@ class Request:
                 f"VALUES ('{id_user}', '{name}', '{number_tb}');"
         await self.connector.execute(query)
 
-    async def add_form_hotel(self, user_id, name_hotel, address_hotel, phone, photo):
-        query = f"INSERT INTO data_hotel (user_id, name_hotel, address, phone, photo)" \
-                f"VALUES ('{user_id}', '{name_hotel}', '{address_hotel}', '{phone}', '{photo}');"
-        await self.connector.execute(query)
-
-    # async def update_form_hotel(self, user_id, name_hotel, address_hotel, phone, photo):
-    #     query = f"INSERT INTO data_hotel (user_id, name_hotel, address, phone, photo)" \
-    #             f"VALUES ('{user_id}', '{name_hotel}', '{address_hotel}', '{phone}', '{photo}');"
-    #     await self.connector.execute(query)
-
-    async def get_form_worker(self):
-        query = f"SELECT * FROM data_worker_search"
+    async def get_data_lafa(self):
+        query = f"SELECT * FROM data_table_lafa"
         data = await self.connector.fetch(query)
         return data
 
-    async def create_vacancy_horika(self, user_id, city, user_name, position, employment, experience, wages):
-        query = f"INSERT INTO vacancy_horika (user_id, city, user_name, position, employment, experience, wages)" \
-                f"VALUES ('{user_id}', '{city}', '{user_name}', '{position}', '{employment}', '{experience}', '{wages}');"
-        await self.connector.execute(query)
-
-    async def get_vacancy_horika(self, city):
-        query = f"SELECT * FROM vacancy_horika WHERE city = '{city}';"
-        data = await self.connector.fetch(query)
-        return data
-
+    async def delete_data_by_id(self, id):
+        query = f"DELETE FROM data_table_lafa WHERE id_user = $1"
+        await self.connector.execute(query, id)
 
 
