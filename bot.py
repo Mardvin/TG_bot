@@ -1,10 +1,13 @@
 import logging
 import asyncio
+import os
+
+from aiogram.fsm.storage.memory import MemoryStorage
 
 from utils.create_pool_db import create_pool
 
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
-from config_reader import config
 
 from middlewares.dbmiddleware import DbSession
 from utils.commands import set_commands
@@ -15,6 +18,13 @@ from main.branch_book.branch_lafa.handlers import choice_table_lafa
 
 from main.branch_admin.handlers import choice_res_adm
 from main.branch_admin.branch_amd_lafa.handlers import adm_lafa
+
+from main.gpt_chat import start_gpt
+
+
+load_dotenv()
+
+TG_API_TOKEN = os.getenv('TG_API_TOKEN')
 
 
 async def start_bot(bot: Bot):
@@ -33,13 +43,13 @@ async def main():
                                "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s")
 
     # Импортирует токен из файла .env
-    bot = Bot(token=config.bot_token.get_secret_value())
+    bot = Bot(token=TG_API_TOKEN)
 
     # Конект к БД
     pool_connect = await create_pool()
 
     # Диспетчер
-    dp = Dispatcher()
+    dp = Dispatcher(storage=MemoryStorage())
 
     # Создает подключение к БД
     dp.update.middleware.register(DbSession(pool_connect))
@@ -62,6 +72,9 @@ async def main():
 
     # Админ панель для lafa
     dp.include_routers(adm_lafa.router)
+
+    # GPT бот
+    dp.include_routers(start_gpt.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

@@ -8,6 +8,7 @@ def start_button() -> ReplyKeyboardMarkup:
     :return:
     """
     kb = ReplyKeyboardBuilder()
+    kb.button(text="Посоветуй мне рестораны")
     kb.button(text="Хочу забронировать столик")
     kb.button(text="Владею рестораном")
     kb.adjust(1)
